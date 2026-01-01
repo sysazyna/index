@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歴史マスター【全106項目・完全版】</title>
+    <title>歴史マスター【入試完全網羅】</title>
     <style>
         :root { --main: #2c3e50; --accent: #3498db; --correct: #27ae60; --wrong: #e74c3c; --check: #f1c40f; --bg: #f4f7f9; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; -webkit-tap-highlight-color: transparent; }
@@ -19,10 +19,10 @@
         .order-item { background: #fff; border: 2px solid #dfe6e9; margin: 10px 0; padding: 16px; border-radius: 12px; font-weight: bold; position: relative; cursor: pointer; user-select: none; }
         .order-item.selected { border-color: var(--accent); background: #e3f2fd; color: var(--accent); }
         .num-circle { position: absolute; right: 15px; background: var(--accent); color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
-        .res-card { display: none; margin-top: 20px; padding: 18px; border-radius: 12px; background: #fffde7; border: 1px solid #f9e79f; }
-        .exp-txt { font-size: 0.9rem; color: #444; margin-top: 10px; line-height: 1.6; border-top: 1px solid #eee; padding-top: 10px; }
+        .res-card { display: none; margin-top: 20px; padding: 18px; border-radius: 12px; background: #fff9db; border: 1px solid #f9e79f; }
+        .exp-txt { font-size: 0.9rem; color: #444; margin: 10px 0; line-height: 1.6; border-top: 1px solid #eee; padding-top: 10px; }
         .next-btn { width: 100%; padding: 16px; background: var(--main); color: white; border: none; border-radius: 12px; font-weight: bold; margin-top: 12px; cursor: pointer; }
-        .copy-area { width: 100%; height: 80px; font-size: 0.75rem; margin-top: 10px; padding: 5px; }
+        .star-btn { width: 100%; padding: 10px; background: var(--check); color: white; border: none; border-radius: 8px; font-weight: bold; margin-bottom: 5px; font-size: 0.85rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -40,43 +40,37 @@
     </div>
 
     <div id="prog-ui" style="display:none;">
-        <div class="stats">
-            <span id="prog-txt">0 / 0 問</span>
-            <span>正解: <span id="session-correct">0</span></span>
-        </div>
+        <div class="stats"><span id="prog-txt">0/0 問</span><span>正解: <span id="session-correct">0</span></span></div>
         <div class="bar-bg"><div id="bar-fill" class="bar-fill"></div></div>
     </div>
 
     <div id="menu">
-        <h2>歴史マスター【全106項目】</h2>
-        <button class="menu-btn" onclick="startQuiz('meiji')">明治・幕末 (43問)</button>
-        <button class="menu-btn" onclick="startQuiz('taisho')">大正・昭和前期 (27問)</button>
-        <button class="menu-btn" onclick="startQuiz('showa2')">戦後・昭和後期 (21問)</button>
-        <button class="menu-btn" onclick="startQuiz('heisei')">平成・現代 (15問)</button>
-        <button class="menu-btn" style="background:var(--accent); color:white;" onclick="startQuiz('all')">全範囲モード (106問)</button>
-        <button id="weak-btn" class="menu-btn" style="border-color:var(--wrong); color:var(--wrong); display:none;" onclick="startQuiz('weak')">苦手克服モード</button>
+        <h2>歴史マスター【全113項目】</h2>
+        <button class="menu-btn" onclick="startQuiz('meiji')">明治・幕末 (48問)</button>
+        <button class="menu-btn" onclick="startQuiz('taisho')">大正・昭和前期 (29問)</button>
+        <button class="menu-btn" onclick="startQuiz('modern')">昭和後期〜現代 (36問)</button>
+        <button class="menu-btn" style="background:var(--accent); color:white;" onclick="startQuiz('all')">全範囲モード (113問)</button>
+        <button id="weak-btn" class="menu-btn" style="border-color:var(--wrong); color:var(--wrong); display:none;" onclick="startQuiz('weak')">苦手・自信なし 復習モード</button>
     </div>
 
     <div id="quiz" style="display:none;">
         <h2 id="q-txt"></h2>
         <div id="choices"></div>
-        <div id="orders" style="display:none;"></div>
+        <div id="orders"></div>
         <button id="decide-btn" class="next-btn" style="background:var(--accent); display:none;" onclick="evalOrder()">決定して判定</button>
         <div id="res-box" class="res-card">
             <div id="judge-txt" style="font-weight:bold; font-size:1.1rem;"></div>
             <div id="exp-txt" class="exp-txt"></div>
+            <button class="star-btn" id="star-btn" onclick="toggleStar()">★ 自信がない（後で復習）</button>
             <button class="next-btn" onclick="goNext()">次の問題へ</button>
         </div>
     </div>
 
     <div id="summary" style="display:none; text-align:center;">
-        <h2 style="font-size:1.5rem;">全問終了！</h2>
+        <h2 style="font-size:1.5rem;">完了！</h2>
         <div style="font-size:3rem; font-weight:bold; color:var(--accent);" id="final-pct">0%</div>
-        <div style="background:#fdf2f2; padding:15px; border-radius:12px; margin-top:15px; text-align:left;">
-            <strong style="color:var(--wrong);">⚠️ Gemini相談用テキスト</strong>
-            <textarea id="gemini-text" class="copy-area" readonly></textarea>
-            <button class="small-btn" style="width:100%; background:#5d6d7e; color:white; margin-top:5px; padding:10px;" onclick="copyGemini()">コピーしてGeminiへ</button>
-        </div>
+        <textarea id="gemini-text" style="width:100%; height:80px; font-size:0.75rem; margin-top:15px;" readonly></textarea>
+        <button class="small-btn" style="width:100%; background:#5d6d7e; color:white; margin-top:5px; padding:10px;" onclick="copyGemini()">相談テキストをコピー</button>
         <button class="next-btn" onclick="backToMenu()">メニューに戻る</button>
     </div>
 </div>
@@ -87,134 +81,70 @@ function checkPass() {
     if(document.getElementById('pass-input').value === FAMILY_PASS) {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('main-app').style.display = 'block';
-        updateStats();
+        updateWeakBtn();
     } else { alert("合言葉が違います"); }
 }
 
+// 厳格な113項目リソース
 const db = [
-    // 明治・幕末 (1853-1911) - 106項目のための詳細データ
-    {id:1, y:1853, e:"ペリー来航", c:"meiji", d:"浦賀に黒船が現れ、鎖国が終わるきっかけに。"},
-    {id:2, y:1853, e:"クリミア戦争開始", c:"meiji", d:"ロシアとオスマン帝国などの戦争。近代戦の先駆け。"},
-    {id:3, y:1854, e:"日米和親条約", c:"meiji", d:"下田・函館を開港し、米に補給を約束しました。"},
-    {id:4, y:1856, e:"アロー戦争・パリ条約", c:"meiji", d:"第2次アヘン戦争と、クリミア戦争の講和条約。"},
-    {id:5, y:1857, e:"インドの反乱", c:"meiji", d:"イギリスの支配に対し、インド兵（シパーヒー）が蜂起。"},
-    {id:6, y:1858, e:"日米修好通商条約", c:"meiji", d:"不平等条約。領事裁判権を認め、関税自主権を失う。"},
-    {id:7, y:1858, e:"アイグン条約・天津条約", c:"meiji", d:"ロシアや英仏が清と結んだ不平等条約です。"},
-    {id:8, y:1859, e:"安政の大獄", c:"meiji", d:"井伊直弼が反対派（吉田松陰ら）を厳しく弾圧。"},
-    {id:9, y:1860, e:"桜田門外の変", c:"meiji", d:"水戸浪士らが大老・井伊直弼を暗殺しました。"},
-    {id:10, y:1860, e:"北京条約", c:"meiji", d:"アロー戦争後の講和。清の衰退が決定的。"},
-    {id:11, y:1861, e:"南北戦争開始", c:"meiji", d:"アメリカ国内で奴隷制などをめぐり勃発した内戦。"},
-    {id:12, y:1862, e:"生麦事件", c:"meiji", d:"薩摩藩主の行列を乱した英人が殺傷された事件。"},
-    {id:13, y:1863, e:"薩英戦争・下関事件", c:"meiji", d:"薩摩・長州が外国の武力を知り、攘夷から倒幕へ。"},
-    {id:14, y:1866, e:"薩長同盟", c:"meiji", d:"坂本龍馬の仲介で、薩摩と長州が倒幕で団結。"},
-    {id:15, y:1867, e:"大政奉還・王政復古", c:"meiji", d:"江戸幕府が終了し、天皇中心の新政府が成立。"},
-    {id:16, y:1868, e:"戊辰戦争・御誓文", c:"meiji", d:"旧幕府軍との戦いと、新政府の基本方針発表。"},
-    {id:17, y:1869, e:"版籍奉還", c:"meiji", d:"土地（版）と人民（籍）を天皇に返還。"},
-    {id:18, y:1869, e:"スエズ運河開通", c:"meiji", d:"地中海と紅海を結び、東西貿易が加速。"},
-    {id:19, y:1870, e:"プロイセン・フランス戦争", c:"meiji", d:"ドイツ統一のきっかけとなった欧州の戦争。"},
-    {id:20, y:1871, e:"廃藩置県・解放令", c:"meiji", d:"藩を廃止し中央集権化。身分差別も撤廃。"},
-    {id:21, y:1871, e:"ドイツ帝国成立", c:"meiji", d:"ビスマルクのもとでドイツが統一されました。"},
-    {id:22, y:1872, e:"学制・富岡製糸場", c:"meiji", d:"小学校教育と、官営模範工場が誕生。"},
-    {id:23, y:1873, e:"徴兵令・地租改正", c:"meiji", d:"国民の兵役と、現金での安定した納税。"},
-    {id:24, y:1874, e:"民撰議院設立建白書", c:"meiji", d:"国会開設を求め、自由民権運動が勃興。"},
-    {id:25, y:1876, e:"日朝修好条規", c:"meiji", d:"日本が武力で朝鮮を開国。不平等条約。"},
-    {id:26, y:1877, e:"西南戦争", c:"meiji", d:"西郷隆盛による士族最後の最大反乱。"},
-    {id:27, y:1880, e:"国会期成同盟", c:"meiji", d:"国会開設を求める運動が全国規模に。"},
-    {id:28, y:1881, e:"国会開設の勅諭", c:"meiji", d:"10年後の国会開設が約束されました。"},
-    {id:29, y:1884, e:"秩父事件", c:"meiji", d:"不況の農民が民権運動の影響で蜂起。"},
-    {id:30, y:1885, e:"内閣制度", c:"meiji", d:"初代総理大臣に伊藤博文が就任。"},
-    {id:31, y:1886, e:"ノルマントン号事件", c:"meiji", d:"不平等条約（領事裁判権）への批判噴出。"},
-    {id:32, y:1889, e:"帝国憲法発布", c:"meiji", d:"アジア初の近代憲法。天皇主権。"},
-    {id:33, y:1890, e:"第1回帝国議会", c:"meiji", d:"日本で初めての国会が開会。"},
-    {id:34, y:1894, e:"日清戦争・条約改正", c:"meiji", d:"清との戦い。同時に法権を回復。"},
-    {id:35, y:1894, e:"甲午農民戦争", c:"meiji", d:"朝鮮で起きた農民反乱。日清戦争のきっかけ。"},
-    {id:36, y:1895, e:"下関条約・三国干渉", c:"meiji", d:"勝利したが露・独・仏が返還を要求。"},
-    {id:37, y:1900, e:"義和団事件", c:"meiji", d:"清の排外運動に連合軍が派遣。"},
-    {id:38, y:1901, e:"八幡製鉄所", c:"meiji", d:"賠償金で建設。重工業発展の象徴。"},
-    {id:39, y:1902, e:"日英同盟", c:"meiji", d:"ロシアに対抗し英と結んだ軍事同盟。"},
-    {id:40, y:1904, e:"日露戦争開始", c:"meiji", d:"満州・韓国の権利をめぐる大戦争。"},
-    {id:41, y:1905, e:"ポーツマス条約", c:"meiji", d:"日露戦争の講和。米の仲介。"},
-    {id:42, y:1910, e:"韓国併合", c:"meiji", d:"韓国を日本の領土として支配。"},
-    {id:43, y:1911, e:"関税自主権回復・辛亥革命", c:"meiji", d:"条約改正の完了と中国の革命。"},
-    // 大正・昭和前期 (1914-1945)
-    {id:44, y:1914, e:"第一次世界大戦開始", c:"taisho", d:"サラエボ事件を機に勃発。"},
-    {id:45, y:1915, e:"二十一か条の要求", c:"taisho", d:"日本が中国に突きつけた利権要求。"},
-    {id:46, y:1917, e:"ロシア革命", c:"taisho", d:"世界初の社会主義政権が誕生。"},
-    {id:47, y:1918, e:"米騒動・原敬内閣", c:"taisho", d:"初の本格的政党内閣の成立。"},
-    {id:48, y:1919, e:"ベルサイユ条約", c:"taisho", d:"第一次大戦の講和条約。"},
-    {id:49, y:1919, e:"三・一、五・四運動", c:"taisho", d:"韓国・中国での民族独立運動。"},
-    {id:50, y:1920, e:"国際連盟発足", c:"taisho", d:"世界平和のための国際組織。"},
-    {id:51, y:1921, e:"ワシントン会議", c:"taisho", d:"海軍軍縮と太平洋の平和維持。"},
-    {id:52, y:1922, e:"ソ連成立", c:"taisho", d:"社会主義共和国連邦が誕生。"},
-    {id:53, y:1923, e:"関東大震災", c:"taisho", d:"首都圏を襲った巨大地震。"},
-    {id:54, y:1925, e:"普通選挙法・治安維持法", c:"taisho", d:"選挙権拡大と弾圧のセット。"},
-    {id:55, y:1929, e:"世界恐慌", c:"taisho", d:"米株価暴落から世界的な不況。"},
-    {id:56, y:1931, e:"満州事変", c:"taisho", d:"柳条湖事件から関東軍が侵攻。"},
-    {id:57, y:1932, e:"五・一五事件", c:"taisho", d:"犬養首相射殺。政党政治の崩壊。"},
-    {id:58, y:1933, e:"国際連盟脱退", c:"taisho", d:"日本の国際的孤立が決定的。"},
-    {id:59, y:1933, e:"ヒトラー政権誕生", c:"taisho", d:"ドイツでナチスが権力を掌握。"},
-    {id:60, y:1936, e:"二・二六事件", c:"taisho", d:"陸軍の一部が起こしたクーデター。"},
-    {id:61, y:1937, e:"日中戦争開始", c:"taisho", d:"盧溝橋事件。全面戦争へ。"},
-    {id:62, y:1938, e:"国家総動員法", c:"taisho", d:"戦時の強制動員を可能に。"},
-    {id:63, y:1939, e:"第二次世界大戦開始", c:"taisho", d:"独のポーランド侵攻で勃発。"},
-    {id:64, y:1940, e:"日独伊三国同盟", c:"taisho", d:"枢軸国が連合国と対立。"},
-    {id:65, y:1941, e:"太平洋戦争開始", c:"taisho", d:"真珠湾攻撃から対米英戦。"},
-    {id:66, y:1941, e:"日ソ中立条約", c:"taisho", d:"日本とソ連が不戦を合意。"},
-    {id:67, y:1945, e:"終戦・ポツダム宣言", c:"taisho", d:"8月15日、日本の敗戦。"},
-    {id:68, y:1945, e:"ヤルタ会談・国連成立", c:"taisho", d:"戦後体制の決定と国連誕生。"},
-    {id:69, y:1945, e:"広島・長崎に原爆", c:"taisho", d:"人類史上初の核兵器使用。"},
-    {id:70, y:1930, e:"ロンドン軍縮会議", c:"taisho", d:"海軍の補助艦制限。統帥権干犯。"},
-    // 昭和後期 (1946-1988)
-    {id:71, y:1946, e:"日本国憲法公布", c:"showa2", d:"新しい民主主義のスタート。"},
-    {id:72, y:1947, e:"日本国憲法施行", c:"showa2", d:"5月3日に正式に施行。"},
-    {id:73, y:1949, e:"中華人民共和国成立", c:"showa2", d:"毛沢東による共産政権誕生。"},
-    {id:74, y:1949, e:"NATO成立", c:"showa2", d:"西側の軍事同盟が誕生。"},
-    {id:75, y:1950, e:"朝鮮戦争・特需景気", c:"showa2", d:"冷戦下の戦争。経済急回復。"},
-    {id:76, y:1951, e:"サンフランシスコ平和条約", c:"showa2", d:"独立回復と日米安保締結。"},
-    {id:77, y:1954, e:"自衛隊発足", c:"showa2", d:"防衛組織の確立。"},
-    {id:78, y:1955, e:"アジア・アフリカ会議", c:"showa2", d:"第3勢力が平和を提唱。"},
-    {id:79, y:1956, e:"日ソ共同宣言・国連加盟", c:"showa2", d:"国際社会への完全復帰。"},
-    {id:80, y:1960, e:"日米新安保条約", c:"showa2", d:"激しい反対運動（安保闘争）。"},
-    {id:81, y:1960, e:"アフリカの年", c:"showa2", d:"17カ国が一気に独立しました。"},
-    {id:82, y:1962, e:"キューバ危機", c:"showa2", d:"核戦争寸前の米ソ対立。"},
-    {id:83, y:1964, e:"東海道新幹線・東京五輪", c:"showa2", d:"高度成長の集大成。"},
-    {id:84, y:1965, e:"日韓基本条約", c:"showa2", d:"韓国との国交正常化。"},
-    {id:85, y:1965, e:"ベトナム戦争本格化", c:"showa2", d:"北爆により米が全面介入。"},
-    {id:86, y:1972, e:"沖縄返還・日中共同声明", c:"showa2", d:"沖縄復帰と日中国交正常化。"},
-    {id:87, y:1973, e:"石油危機", c:"showa2", d:"狂乱物価。高度成長の終焉。"},
-    {id:88, y:1973, e:"ベトナム和平協定", c:"showa2", d:"米軍が撤退を開始しました。"},
-    {id:89, y:1975, e:"第1回サミット", c:"showa2", d:"主要国首脳による経済会議。"},
-    {id:90, y:1978, e:"日中平和友好条約", c:"showa2", d:"中国との友好を深める条約。"},
-    {id:91, y:1955, e:"自由民主党結成(55年体制)", c:"showa2", d:"保革対立の政治体制が確立。"},
-    // 平成・現代 (1989-2011)
-    {id:92, y:1989, e:"消費税導入", c:"heisei", d:"平成開始と同時に3%開始。"},
-    {id:93, y:1989, e:"ベルリンの壁崩壊", c:"heisei", d:"冷戦の終わりを象徴。"},
-    {id:94, y:1989, e:"天安門事件", c:"heisei", d:"中国で民主化を求める学生を武力鎮圧。"},
-    {id:95, y:1990, e:"ドイツ統一", c:"heisei", d:"東西ドイツが一つに。"},
-    {id:96, y:1991, e:"バブル崩壊・ソ連解体", c:"heisei", d:"激動の世界と国内不況。"},
-    {id:97, y:1991, e:"湾岸戦争", c:"heisei", d:"イラクのクウェート侵攻に対し多国籍軍。"},
-    {id:98, y:1992, e:"PKO協力法", c:"heisei", d:"自衛隊の海外派遣が可能に。"},
-    {id:99, y:1993, e:"EU成立", c:"heisei", d:"欧州連合が誕生しました。"},
-    {id:100, y:1995, e:"阪神・淡路大震災", c:"heisei", d:"1月に起きた巨大震災。"},
-    {id:101, y:1997, e:"京都会議(COP3)", c:"heisei", d:"温室効果ガスの削減合意。"},
-    {id:102, y:1998, e:"長野オリンピック", c:"heisei", d:"冬季五輪。国内インフラ整備。"},
-    {id:103, y:2001, e:"アメリカ同時テロ", c:"heisei", d:"9.11。世界が衝撃。"},
-    {id:104, y:2002, e:"日朝平壌宣言", c:"heisei", d:"小泉首相が初訪朝。"},
-    {id:105, y:2003, e:"自衛隊イラク派遣", c:"heisei", d:"イラク復興支援のための派遣。"},
-    {id:106, y:2011, e:"東日本大震災", c:"heisei", d:"3.11。未曾有の複合災害。"}
+    {id:1,y:1853,e:"ペリー来航",c:"meiji",d:"浦賀に黒船。開国要求。"},{id:2,y:1854,e:"日米和親条約",c:"meiji",d:"下田・函館開港。鎖国終了。"},{id:3,y:1858,e:"日米修好通商条約",c:"meiji",d:"不平等条約。関税自主権なし。"},
+    {id:4,y:1859,e:"安政の大獄",c:"meiji",d:"井伊直弼による弾圧。"},{id:5,y:1860,e:"桜田門外の変",c:"meiji",d:"井伊直弼暗殺。"},{id:6,y:1862,e:"生麦事件",c:"meiji",d:"薩摩藩士がイギリス人殺傷。"},
+    {id:7,y:1863,e:"薩英戦争",c:"meiji",d:"薩摩とイギリスの戦い。"},{id:8,y:1863,e:"下関事件",c:"meiji",d:"長州が外国船を砲撃。"},{id:9,y:1866,e:"薩長同盟",c:"meiji",d:"坂本龍馬の仲介。"},
+    {id:10,y:1867,e:"大政奉還",c:"meiji",d:"徳川慶喜が政権返上。"},{id:11,y:1867,e:"王政復古の大号令",c:"meiji",d:"新政府樹立宣言。"},{id:12,y:1868,e:"戊辰戦争",c:"meiji",d:"旧幕府軍との内戦。"},
+    {id:13,y:1868,e:"五箇条の御誓文",c:"meiji",d:"明治政府の基本方針。"},{id:14,y:1869,e:"版籍奉還",c:"meiji",d:"土地人民を天皇へ。"},{id:15,y:1871,e:"廃藩置県",c:"meiji",d:"中央集権化。"},
+    {id:16,y:1871,e:"解放令",c:"meiji",d:"身分差別廃止。"},{id:17,y:1871,e:"日清修好条規",c:"meiji",d:"清との対等条約。"},{id:18,y:1872,e:"学制",c:"meiji",d:"近代教育開始。"},
+    {id:19,y:1872,e:"富岡製糸場",c:"meiji",d:"官営模範工場。"},{id:20,y:1873,e:"徴兵令",c:"meiji",d:"国民兵役義務。"},{id:21,y:1873,e:"地租改正",c:"meiji",d:"現金納税開始。"},
+    {id:22,y:1874,e:"民撰議院設立建白書",c:"meiji",d:"自由民権の端緒。"},{id:23,y:1874,e:"自由民権運動",c:"meiji",d:"民主化運動。"},{id:24,y:1876,e:"日朝修好条規",c:"meiji",d:"朝鮮開国。不平等条約。"},
+    {id:25,y:1877,e:"西南戦争",c:"meiji",d:"西郷隆盛の士族反乱。"},{id:26,y:1880,e:"国会期成同盟",c:"meiji",d:"国会開設運動。"},{id:27,y:1881,e:"国会開設の勅諭",c:"meiji",d:"10年後約束。"},
+    {id:28,y:1884,e:"秩父事件",c:"meiji",d:"農民武装蜂起。"},{id:29,y:1885,e:"内閣制度",c:"meiji",d:"伊藤博文初代首相。"},{id:30,y:1886,e:"ノルマントン号事件",c:"meiji",d:"不平等条約への不満。"},
+    {id:31,y:1889,e:"大日本帝国憲法発布",c:"meiji",d:"天皇主権憲法。"},{id:32,y:1890,e:"第1回帝国議会",c:"meiji",d:"議会政治開始。"},{id:33,y:1890,e:"教育勅語",c:"meiji",d:"道徳規範。"},
+    {id:34,y:1894,e:"治外法権撤廃",c:"meiji",d:"陸奥宗光の成果。"},{id:35,y:1894,e:"甲午農民戦争",c:"meiji",d:"朝鮮での農民反乱。"},{id:36,y:1894,e:"日清戦争",c:"meiji",d:"日本vs清。"},
+    {id:37,y:1895,e:"下関条約",c:"meiji",d:"日清講和条約。"},{id:38,y:1895,e:"三国干渉",c:"meiji",d:"露独仏の圧力。"},{id:39,y:1900,e:"義和団事件",c:"meiji",d:"清での排外運動。"},
+    {id:40,y:1901,e:"八幡製鉄所",c:"meiji",d:"重工業発展の拠点。"},{id:41,y:1902,e:"日英同盟",c:"meiji",d:"対ロシア同盟。"},{id:42,y:1904,e:"日露戦争",c:"meiji",d:"日本vsロシア。"},
+    {id:43,y:1905,e:"ポーツマス条約",c:"meiji",d:"日露講和条約。"},{id:44,y:1910,e:"韓国併合",c:"meiji",d:"日本の支配下に。"},{id:45,y:1910,e:"大逆事件",c:"meiji",d:"社会主義者処罰。"},
+    {id:46,y:1911,e:"関税自主権回復",c:"meiji",d:"小村寿太郎が成功。"},{id:47,y:1911,e:"辛亥革命",c:"meiji",d:"清が倒れ中華民国へ。"},
+    {id:48,y:1914,e:"第一次世界大戦参戦",c:"taisho",d:"日英同盟を理由に。"},{id:49,y:1914,e:"サラエボ事件",c:"taisho",d:"1次大戦の契機。"},{id:50,y:1914,e:"第一次世界大戦",c:"taisho",d:"世界規模の大戦。"},
+    {id:51,y:1915,e:"二十一か条の要求",c:"taisho",d:"中国への要求。"},{id:52,y:1917,e:"ロシア革命",c:"taisho",d:"社会主義国誕生。"},{id:53,y:1918,e:"シベリア出兵",c:"taisho",d:"革命干渉軍。"},
+    {id:54,y:1918,e:"米騒動",c:"taisho",d:"米価高騰への暴動。"},{id:55,y:1918,e:"原敬内閣発足",c:"taisho",d:"本格政党内閣。"},{id:56,y:1919,e:"ベルサイユ条約",c:"taisho",d:"1次大戦の講和。"},
+    {id:57,y:1919,e:"三・一独立運動",c:"taisho",d:"朝鮮の独立運動。"},{id:58,y:1919,e:"五・四運動",c:"taisho",d:"中国の民衆運動。"},{id:59,y:1920,e:"国際連盟",c:"taisho",d:"平和維持組織。"},
+    {id:60,y:1921,e:"ワシントン会議",c:"taisho",d:"軍縮合意。"},{id:61,y:1922,e:"ソ連成立",c:"taisho",d:"ソビエト連邦。"},{id:62,y:1923,e:"関東大震災",c:"taisho",d:"首都圏巨大地震。"},
+    {id:63,y:1925,e:"普通選挙法",c:"taisho",d:"男子選挙権拡大。"},{id:64,y:1925,e:"治安維持法",c:"taisho",d:"思想弾圧法。"},{id:65,y:1925,e:"ラジオ放送の開始",c:"taisho",d:"情報化。"},
+    {id:66,y:1929,e:"世界恐慌",c:"taisho",d:"世界経済崩壊。"},{id:67,y:1931,e:"満州事変",c:"taisho",d:"柳条湖事件契機。"},{id:68,y:1932,e:"五・一五事件",c:"taisho",d:"首相暗殺。"},
+    {id:69,y:1933,e:"国際連盟脱退",c:"taisho",d:"日本の孤立。"},{id:70,y:1936,e:"二・二六事件",c:"taisho",d:"軍部クーデター。"},{id:71,y:1937,e:"日中戦争",c:"taisho",d:"盧溝橋事件契機。"},
+    {id:72,y:1938,e:"国家総動員法",c:"taisho",d:"戦時体制強化。"},{id:73,y:1939,e:"第二次世界大戦",c:"taisho",d:"世界大戦再発。"},{id:74,y:1940,e:"日独伊三国同盟",c:"taisho",d:"枢軸国形成。"},
+    {id:75,y:1941,e:"日ソ中立条約",c:"taisho",d:"不戦合意。"},{id:76,y:1941,e:"太平洋戦争",c:"taisho",d:"真珠湾攻撃。"},{id:77,y:1941,e:"大西洋憲章",c:"taisho",d:"戦後方針。"},
+    {id:78,y:1945,e:"ポツダム宣言受諾",c:"taisho",d:"無条件降伏。"},{id:79,y:1945,e:"国際連合成立",c:"taisho",d:"現在の平和組織。"},{id:80,y:1945,e:"冷戦勃発",c:"taisho",d:"米ソ対立。"},
+    {id:81,y:1946,e:"日本国憲法公布",c:"modern",d:"三原則明記。"},{id:82,y:1947,e:"日本国憲法施行",c:"modern",d:"正式稼働。"},{id:83,y:1949,e:"北大西洋条約機構",c:"modern",d:"NATO成立。"},
+    {id:84,y:1949,e:"中華人民共和国成立",c:"modern",d:"中国共産党。"},{id:85,y:1950,e:"警察予備隊設置",c:"modern",d:"再軍備。"},{id:86,y:1950,e:"特需景気",c:"modern",d:"朝鮮戦争恩恵。"},
+    {id:87,y:1950,e:"朝鮮戦争",c:"modern",d:"冷戦下の戦い。"},{id:88,y:1951,e:"サンフランシスコ平和条約",c:"modern",d:"独立回復。"},{id:89,y:1951,e:"日米安全保障条約",c:"modern",d:"軍事同盟。"},
+    {id:90,y:1954,e:"自衛隊発足",c:"modern",d:"現在の組織。"},{id:91,y:1955,e:"アジア・アフリカ会議",c:"modern",d:"第三勢力。"},{id:92,y:1956,e:"日ソ共同宣言",c:"modern",d:"国交回復。"},
+    {id:93,y:1956,e:"国際連合加盟",c:"modern",d:"国連復帰。"},{id:94,y:1960,e:"日米新安全保障条約",c:"modern",d:"安保改定。"},{id:95,y:1960,e:"アフリカの年",c:"modern",d:"17国独立。"},
+    {id:96,y:1962,e:"キューバ危機",c:"modern",d:"核戦争危機。"},{id:97,y:1964,e:"東海道新幹線開通",c:"modern",d:"高度成長象徴。"},{id:98,y:1964,e:"東京オリンピック",c:"modern",d:"復興のアピール。"},
+    {id:99,y:1965,e:"日韓基本条約",c:"modern",d:"国交正常化。"},{id:100,y:1965,e:"ベトナム戦争拡大",c:"modern",d:"米軍介入。"},{id:101,y:1972,e:"沖縄返還",c:"modern",d:"本土復帰。"},
+    {id:102,y:1972,e:"日中共同声明",c:"modern",d:"国交正常化。"},{id:103,y:1973,e:"石油危機",c:"modern",d:"オイルショック。"},{id:104,y:1975,e:"主要国首脳会議（サミット）",c:"modern",d:"経済会議。"},
+    {id:105,y:1978,e:"日中平和友好条約",c:"modern",d:"友好確立。"},{id:106,y:1989,e:"消費税導入",c:"modern",d:"3%開始。"},{id:107,y:1989,e:"ベルリンの壁崩壊",c:"modern",d:"冷戦末期。"},
+    {id:108,y:1990,e:"東西ドイツ統一",c:"modern",d:"統合。"},{id:109,y:1991,e:"バブル経済崩壊",c:"modern",d:"不況開始。"},{id:110,y:1991,e:"湾岸戦争",c:"modern",d:"イラク侵攻対抗。"},
+    {id:111,y:1991,e:"ソ連解体",c:"modern",d:"冷戦終了。"},{id:112,y:1992,e:"国連平和維持活動（PKO）協力法",c:"modern",d:"自衛隊派遣。"},{id:113,y:1993,e:"EU成立",c:"modern",d:"欧州統合。"},
+    {id:114,y:1995,e:"阪神・淡路大震災",c:"modern",d:"大震災。"},{id:115,y:1997,e:"地球温暖化防止京都会議",c:"modern",d:"環境会議。"},{id:116,y:1998,e:"長野オリンピック",c:"modern",d:"冬季五輪。"},
+    {id:117,y:2001,e:"アメリカ同時多発テロ",c:"modern",d:"9.11。"},{id:118,y:2002,e:"日朝平壌宣言",c:"modern",d:"拉致問題。"},{id:119,y:2003,e:"自衛隊イラク派遣",c:"modern",d:"人道復興。"},
+    {id:120,y:2003,e:"イラク戦争",c:"modern",d:"米英主導戦。"},{id:121,y:2011,e:"東日本大震災",c:"modern",d:"巨大複合災害。"}
 ];
 
-let wrongs = new Set(JSON.parse(localStorage.getItem('wr_final_v6') || '[]'));
-let pool = [], currentQ = null, currentIndex = 0, sessionScore = 0, sessionWrongs = [];
-let userOrder = [];
+let wrongs = new Set(JSON.parse(localStorage.getItem('wr_strictly_v10') || '[]'));
+let stars = new Set(JSON.parse(localStorage.getItem('st_strictly_v10') || '[]'));
+let pool = [], currentQ = null, currentIndex = 0, sessionScore = 0, sessionWrongs = [], userOrderIds = [];
 
-function updateStats() {
-    document.getElementById('weak-btn').style.display = (wrongs.size > 0) ? 'block' : 'none';
+function updateWeakBtn() {
+    const totalWeak = wrongs.size + stars.size;
+    document.getElementById('weak-btn').style.display = (totalWeak > 0) ? 'block' : 'none';
+    document.getElementById('w-bad').innerText = wrongs.size;
+    document.getElementById('s-bad').innerText = stars.size;
 }
 
 function startQuiz(mode) {
     if(mode === 'weak') {
-        pool = db.filter(i => wrongs.has(i.e));
+        const combined = [...new Set([...Array.from(wrongs), ...Array.from(stars)])];
+        pool = db.filter(i => combined.includes(i.e));
     } else {
         pool = mode === 'all' ? [...db] : db.filter(i => i.c === mode);
     }
@@ -233,24 +163,18 @@ function next() {
     document.getElementById('res-box').style.display = 'none';
     document.getElementById('decide-btn').style.display = 'none';
     document.getElementById('back-btn').disabled = (currentIndex === 0);
-    document.getElementById('prog-txt').innerText = `${currentIndex + 1} / ${pool.length} 問目`;
+    document.getElementById('prog-txt').innerText = `${currentIndex + 1} / ${pool.length} 問`;
     document.getElementById('bar-fill').style.width = `${((currentIndex+1)/pool.length)*100}%`;
     document.getElementById('session-correct').innerText = sessionScore;
-
-    if(currentIndex % 3 === 2 && (pool.length - currentIndex) >= 3) {
-        setupOrder();
-    } else {
-        setupYear();
-    }
+    if(currentIndex % 3 === 2 && (pool.length - currentIndex) >= 3) setupOrder(); else setupYear();
 }
 
 function setupYear() {
     currentQ = { ...pool[currentIndex], type:'year' };
     document.getElementById('q-txt').innerText = `「${currentQ.e}」は何年？`;
+    document.getElementById('choices').style.display = 'block';
     document.getElementById('orders').style.display = 'none';
-    const area = document.getElementById('choices');
-    area.style.display = 'block'; area.innerHTML = '';
-    
+    const area = document.getElementById('choices'); area.innerHTML = '';
     let opts = [currentQ.y];
     while(opts.length < 4) {
         let r = db[Math.floor(Math.random()*db.length)].y;
@@ -258,102 +182,93 @@ function setupYear() {
     }
     opts.sort(() => Math.random() - 0.5);
     opts.forEach(y => {
-        const b = document.createElement('button');
-        b.className = 'choice-btn'; b.innerText = `${y}年`;
+        const b = document.createElement('button'); b.className = 'choice-btn'; b.innerText = `${y}年`;
         b.onclick = () => finish(y === currentQ.y, `正解：${currentQ.y}年`);
         area.appendChild(b);
     });
 }
 
 function setupOrder() {
-    let subItems = pool.slice(currentIndex, currentIndex + 3);
-    currentQ = { correct: [...subItems].sort((a,b) => a.y - b.y), type:'order', items: subItems };
+    let sub = pool.slice(currentIndex, currentIndex + 3);
+    currentQ = { correctIds: [...sub].sort((a,b) => a.y - b.y).map(i => i.id), type:'order', items: sub };
     document.getElementById('q-txt').innerText = "古い順に3つ選んでください\n(再タップで解除)";
     document.getElementById('choices').style.display = 'none';
-    const area = document.getElementById('orders');
-    area.style.display = 'block'; 
-    userOrder = [];
-    renderOrderItems();
+    document.getElementById('orders').style.display = 'block';
+    userOrderIds = []; renderOrder();
 }
 
-function renderOrderItems() {
-    const area = document.getElementById('orders');
-    area.innerHTML = '';
+function renderOrder() {
+    const area = document.getElementById('orders'); area.innerHTML = '';
     currentQ.items.forEach(item => {
-        const d = document.createElement('div');
-        d.className = 'order-item';
-        const selIdx = userOrder.findIndex(i => i.id === item.id);
-        if(selIdx !== -1) {
-            d.classList.add('selected');
-            d.innerHTML = `<span class="num-circle">${selIdx + 1}</span>${item.e}`;
-        } else {
-            d.innerText = item.e;
-        }
+        const d = document.createElement('div'); d.className = 'order-item';
+        const sIdx = userOrderIds.indexOf(item.id);
+        if(sIdx !== -1) { d.classList.add('selected'); d.innerHTML = `<span class="num-circle">${sIdx+1}</span>${item.e}`; }
+        else { d.innerText = item.e; }
         d.onclick = () => {
-            const existingIdx = userOrder.findIndex(i => i.id === item.id);
-            if(existingIdx !== -1) { userOrder.splice(existingIdx, 1); }
-            else { if(userOrder.length < 3) userOrder.push(item); }
-            renderOrderItems();
+            const i = userOrderIds.indexOf(item.id);
+            if(i === -1) { if(userOrderIds.length < 3) userOrderIds.push(item.id); }
+            else { userOrderIds.splice(i, 1); }
+            renderOrder();
         };
         area.appendChild(d);
     });
-    document.getElementById('decide-btn').style.display = (userOrder.length === 3) ? 'block' : 'none';
+    document.getElementById('decide-btn').style.display = (userOrderIds.length === 3) ? 'block' : 'none';
 }
 
 function evalOrder() {
-    const ok = userOrder.every((v, i) => v.id === currentQ.correct[i].id);
-    const msg = "【正しい順序】<br>" + currentQ.correct.map((i,idx) => `${idx+1}. ${i.y}年: ${i.e}`).join('<br>');
-    finish(ok, msg);
+    const ok = userOrderIds.every((v, i) => v === currentQ.correctIds[i]);
+    const ansTxt = currentQ.correctIds.map((id, idx) => {
+        const item = db.find(x => x.id === id);
+        return `${idx+1}. ${item.y}年: ${item.e}`;
+    }).join('<br>');
+    finish(ok, "【正しい順序】<br>" + ansTxt);
 }
 
-function finish(ok, title) {
+function finish(ok, msg) {
+    document.getElementById('decide-btn').style.display = 'none';
     document.getElementById('res-box').style.display = 'block';
     const j = document.getElementById('judge-txt');
-    if(ok) {
-        j.innerText = "⭕ 正解！"; j.style.color = "var(--correct)";
-        sessionScore++;
-        if(currentQ.type === 'year') wrongs.delete(currentQ.e);
-        else currentQ.items.forEach(it => wrongs.delete(it.e));
-    } else {
-        j.innerText = "❌ 不正解"; j.style.color = "var(--wrong)";
-        if(currentQ.type === 'year') {
-            wrongs.add(currentQ.e);
-            sessionWrongs.push(currentQ);
-        } else {
-            currentQ.items.forEach(it => wrongs.add(it.e));
-            sessionWrongs.push(currentQ.correct[0]); 
-        }
+    if(ok) { j.innerText = "⭕ 正解！"; j.style.color = "var(--correct)"; sessionScore++; 
+        if(currentQ.type === 'year') wrongs.delete(currentQ.e); else currentQ.items.forEach(it => wrongs.delete(it.e));
+    } else { j.innerText = "❌ 不正解"; j.style.color = "var(--wrong)"; 
+        if(currentQ.type === 'year') { wrongs.add(currentQ.e); sessionWrongs.push(currentQ); }
+        else { currentQ.items.forEach(it => wrongs.add(it.e)); sessionWrongs.push(currentQ.items[0]); }
     }
-    const exp = (currentQ.type === 'year') ? currentQ.d : "順番を整理しましょう。";
-    document.getElementById('exp-txt').innerHTML = `<strong>${title}</strong><br><br>${exp}`;
-    save();
+    document.getElementById('exp-txt').innerHTML = `<strong>${msg}</strong><br><br>${currentQ.d || ""}`;
+    updateStarBtn(); save();
+}
+
+function toggleStar() {
+    if(stars.has(currentQ.e)) stars.delete(currentQ.e); else stars.add(currentQ.e);
+    updateStarBtn(); save();
+}
+
+function updateStarBtn() {
+    const btn = document.getElementById('star-btn');
+    if(stars.has(currentQ.e)) { btn.innerText = "★ チェック済み"; btn.style.opacity = "0.6"; }
+    else { btn.innerText = "★ 自信がない（後で復習）"; btn.style.opacity = "1"; }
 }
 
 function goNext() { currentIndex++; next(); }
 function goBack() { if(currentIndex > 0) { currentIndex--; next(); } }
-
 function backToMenu() {
-    document.getElementById('quiz').style.display = 'none';
-    document.getElementById('prog-ui').style.display = 'none';
-    document.getElementById('nav-bar').style.display = 'none';
-    document.getElementById('summary').style.display = 'none';
-    document.getElementById('menu').style.display = 'block';
-    updateStats();
+    document.getElementById('quiz').style.display = 'none'; document.getElementById('prog-ui').style.display = 'none';
+    document.getElementById('nav-bar').style.display = 'none'; document.getElementById('summary').style.display = 'none';
+    document.getElementById('menu').style.display = 'block'; updateWeakBtn();
 }
 
 function showSummary() {
-    document.getElementById('quiz').style.display = 'none';
-    document.getElementById('prog-ui').style.display = 'none';
+    document.getElementById('quiz').style.display = 'none'; document.getElementById('nav-bar').style.display = 'none';
     document.getElementById('summary').style.display = 'block';
-    const pct = Math.round((sessionScore / pool.length) * 100);
-    document.getElementById('final-pct').innerText = `${pct}%`;
-    let gem = "【歴史学習分析】以下の問題で間違えました。解説をお願いします。\n\n" + sessionWrongs.map(w => `・${w.y}年：${w.e}`).join("\n");
+    document.getElementById('final-pct').innerText = `${Math.round((sessionScore / pool.length) * 100)}%`;
+    let gem = "【歴史分析依頼】以下の問題で間違えました。解説をお願いします。\n\n" + sessionWrongs.map(w => `・${w.y}年：${w.e}`).join("\n");
     document.getElementById('gemini-text').value = gem;
 }
-
 function copyGemini() { document.getElementById('gemini-text').select(); document.execCommand('copy'); alert("コピーしました！"); }
-function save() { localStorage.setItem('wr_final_v6', JSON.stringify(Array.from(wrongs))); }
-updateStats();
+function save() { 
+    localStorage.setItem('wr_strictly_v10', JSON.stringify(Array.from(wrongs))); 
+    localStorage.setItem('st_strictly_v10', JSON.stringify(Array.from(stars))); 
+}
 </script>
 </body>
 </html>
